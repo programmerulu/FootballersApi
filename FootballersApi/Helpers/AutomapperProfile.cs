@@ -11,6 +11,9 @@ namespace FootballersApi.Helpers
             CreateMap<FootballerForCreationDto,Footballer >();
             CreateMap<Footballer, FootballerForListDto>().ForMember(dest=>dest.TeamName, 
                 opt=> opt.MapFrom(src=>src.Team.TeamName));
+
+            CreateMap<Team, TeamForListDto>().ForMember(dest => dest.NumberOfFootballers,
+                opt => opt.MapFrom(src => src.Footballers.Count));
         }
     }
 }

@@ -1,4 +1,6 @@
-﻿using FootballersApi.Data;
+﻿using AutoMapper;
+using FootballersApi.Data;
+using FootballersApi.Dtos;
 using FootballersApi.Models;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -10,9 +12,11 @@ namespace FootballersApi.Controllers
     public class TeamsController : ControllerBase
     {
         private readonly IAppRepository _appRepository;
-        public TeamsController(IAppRepository appRepository)
+        private readonly IMapper _mapper;
+        public TeamsController(IAppRepository appRepository, IMapper mapper)
         {
             _appRepository = appRepository;
+            _mapper = mapper;
         }
         [HttpPost("create")]
         public IActionResult CreateTeam([FromBody] Team team)
@@ -52,8 +56,13 @@ namespace FootballersApi.Controllers
         [HttpGet("readAll")]
         public IActionResult ReadAllTeam()
         {
+            var tempTeams = new List<TeamForListDto>();
             var allTeams=_appRepository.ReadAllTeams();
-            return Ok(allTeams);
+            foreach (var team in allTeams)
+            {
+                tempTeams.Add(_mapper.Map<TeamForListDto>(team));
+            }
+            return Ok(tempTeams);
         }
     }
 }

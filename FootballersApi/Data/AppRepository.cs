@@ -36,7 +36,7 @@ namespace FootballersApi.Data
 
         public List<Team> ReadAllTeams()
         {
-            return _context.Teams.ToList();
+            return _context.Teams.Include(f=>f.Footballers).ToList();
 
         }
 
